@@ -18,16 +18,19 @@ I changed my process, and moved to Google Colab to alleviate the burden on my co
 The notebook was working and could successfully convert .pdfs to .tiff, and extract the text. However, the tutorial used Yandex to translate the converted .tiff documents, and I repeatedly ran into this error:
 ___
 ![[error message OCR notebook.png]]
+![image](https://github.com/user-attachments/assets/1cfc47d3-0657-4bef-ba0d-cf02cf07cd70)
 ___
 I could not find any explanation or solution to this error, so rather than using Yandex, I altered the code slightly so that it would use Google Translate instead as it was already an available engine, and it worked quite well. The caveat was that Google Translate only allows for the translation of a limited amount of characters without an API, and realistically, this snippet of code/GC notebook wasn't sufficient for the amount of translating I would have needed to do to translate an entire book.
 
 The extraction element of the notebook was quite handy, and I thought I would test it out on some pdfs that I had collected for my thesis with important information relating to my research. However, another problem that I encountered is that the OCR capabilities of ImageMagic are limited when it comes to reading the information from the target document when the formatting is different than a standard letter. The records that I had were horizontal in orientation, with data written in table format, which resulted in a very muddled, slop of words with unrecognizable characters.
 ___
 ![[OCR output AH records.png]]
+![image](https://github.com/user-attachments/assets/e4cbdc66-8b5e-4f0f-9e13-c9eac7e807cc)
 ___
 I had previously typed this data out by hand:
 ___
 ![[AH records.xlsx.png]]
+![image](https://github.com/user-attachments/assets/5a46cf93-e5b3-4349-bd1f-0d1ff9767c65)
 ___
 but I was hoping that this (cheat) code could help speed up the process when it came to extracting data from a record formatted as a table.
 
@@ -42,6 +45,7 @@ In his tutorial [Fetching and Parsing Data from the Web with OpenRefine](https:/
 This is how the information is presented on the Looted Art website:
 ___
 ![[LootedArt report.png]]
+![image](https://github.com/user-attachments/assets/148d5629-8743-498c-8e51-0793f35da5cb)
 ___
 I wanted to separate the information in these blocks into categories: name, location, content/information. At this point in time, my thinking was that if I separated out the information, it would be easier to read and then graph in Palladio according to the way the author of the [From Hermeneutics to Data to Networks: Data Extraction and Network Visualization of Historical Sources](https://programminghistorian.org/en/lessons/creating-network-diagrams-from-historical-sources) tutorial arranged his data. 
 
@@ -52,6 +56,7 @@ The end goal of the tutorial wasn't necessarily what I wanted to achieve with my
 The process to clean up the data from lootedart .com was not without its challenges, but I managed to get the data separated into different columns and cleared of any unnecessary HTML jargon:
 ___
 ![[ALIU Open Refine.png]]
+![image](https://github.com/user-attachments/assets/c7087a3d-b48d-480f-8f50-d5125580937b)
 ____
 The problem was, whereas I wanted name, location, and context/information, I could not work out a way to differentiate the information in "text clean 2" between 'location' and 'other information'. Regardless, I still had managed to separate the information and now had three distinct columns with different information. 
 But I wanted to visualize the connections between the individuals on the list, and while Open Refine did a nice job of separating the block text, it was no better or different than what I could have done by hand. In fact, had I done this by hand, the names would have been formatted in a 'first name last name' way, and there would have been a distinction in the second column between location and context/information. I ultimately decided to move on from Open Refine and try something else that would have given me better, cleaner results. 
@@ -64,6 +69,7 @@ I was beginning to feel frustrated with how the project was progressing because 
 In an effort to understand better and learn more about what I was doing, I took the "structured-data-extractor-using-groq-and-llm-and-coreferee.ipynb" GC notebook and spent quite a bit of time learning what each line did and commented out its function in a new notebook that I was creating as I was going along. Essentially, I had the original notebook open on one screen, and a new notebook open on another, and I went down each line, wrote it into the new notebook and added comments that explained me what each line did for current and future reference. This was important to me, because it gave me a base understanding of how the notebook ran and the process that resulted in the .csv output with the network connections based on the text it was given.
 ___
 ![[MASTERdata_extractor_SG_Copy with comments.png]]
+![image](https://github.com/user-attachments/assets/ed4a7f6b-a2dc-40c5-8a44-f4d34bd3198f)
 ___
 I started off by using the notebook with the pre-loaded text about Giacomo Medici to gauge how it works, and to understand the connections that are picked out of the sample passage. Once I could understand, and read where the output information was coming from, I wanted to try the code on a sample text from my own research. I've been working on a timeline that I've compiled by pulling information from various sources about the central person and event my thesis focuses on. I initially thought that this would be a useful text to extract possible network connections from because it would help me to visualize a timespan of about 80 years in a way I hadn't yet been able to visualize. However, my timeline wasn't formatted in a way that was easy for the LLM to draw connections because as it stands, it is written in a way that makes sense to my brain and my way of thinking and not necessarily in an easily digestible way as there are abbreviations and references to things that the LLM didn't know about without the proper context. I felt that I was back at square one without any direction, but I was excited at the prospect of the code's capabilities. So rather than look at my own research, I decided to approach this in a different way and extract information from an established database that is connected to my work in such a way that will help my future research. 
 
@@ -90,12 +96,14 @@ ___
 After running this through the GC notebook, I was pleased to see the following results: 
 ___
 ![[Data Extractor first test ALIU.png]]
+![image](https://github.com/user-attachments/assets/9f4a36b5-c693-44e6-b180-cfcd492d68c2)
 ___
 This result felt successful to me. There were additional columns and connections that could have been made by a human going in (which I will touch on later!), but the generated predicates were true to the text, and the output was clean and clear. 
 
 The ALIU report lists over 1000 individuals and I felt that the scope was too large for the purpose of this project, so I decided to only look at the individuals from Germany. I worked methodically in small sections going by last name along the report and generated .csv files with network connections using the notebook. 
 ___
 ![[files of names in alphabetical order.png]]
+![image](https://github.com/user-attachments/assets/5a40fc42-05bc-44ca-be93-3ed7e71e7206)
 ___
 Unfortunately, when I got to letters 'H' and 'G', I had maxed out my Google Colab GPU allowance, and it was asking for a paid subscription to proceed with using the GPU runtime type. This kind of threw a wrench in my plan because I had 18 more letters to get through in order to create a substantial graph. My problem too, was that working with a smaller size would be fine under other circumstances, but in this case, there are individuals with last names that begin with 'W' connected to individuals with last names that begin with 'A', but if I did not include the later individuals in the graph, no connections would be made. 
 
@@ -104,6 +112,7 @@ So I took matters into my own hands.
 Working based on the format of the generated .csv file, I went in and wrote all the connections by hand for each of the 492 individuals on the list under the 'Germany' category. 
 ___
 ![[ALIU source relationship target masterlist.png]]
+![image](https://github.com/user-attachments/assets/b60b96a6-1f3f-4c5d-b710-f14aa2be5e99)
 ___
 
 ## **Palladio**
@@ -112,10 +121,12 @@ My original intention was to use Palladio to graph my the ALIU networks. I follo
 When I was ready to use my own data, I selected a small sample size from my master list and made two separate csv files (nodes and edges) in order to create a bipartite graph. 
 ___
 ![[nodes and edges for palladio.png]]
+![image](https://github.com/user-attachments/assets/f3344196-3d61-486f-ba6d-39a91fc428e0)
 ____
 The resulting graph on Palladio was a good start to what I was hoping would eventually become a large-scale complex network graph. 
 ___
 ![[Palladio ALIU graph.png]]
+![image](https://github.com/user-attachments/assets/2a43fd67-8ff4-45a9-8650-e1532f259a6d)
 ___
 I wanted to visualize the network in a more comprehensive way, and to be completely truthful, I do not really like Palladio's interface and the constantly moving graph does not work for me. 
 
@@ -133,12 +144,14 @@ I like the ForceAtlas 2 graph in comparison to the Fruchterman Reingold layout f
 Under the statistics tab, I ran the average weighted degree report so that Gephi could determine the most influential nodes. From there, it was simply a matter of playing around and adjusting the scale and gravity, weight and colours of the graph before moving on to the preview tab of the graph which allowed me to adjust the final look of my network. 
 ___
 ![[Gephi ALIU graph overview page adjustments.png]]
+![image](https://github.com/user-attachments/assets/9fabb540-952f-46e9-8c1f-56f348aeb6ed)
 ___
 My complete graph was neatly presented in such a way that illustrated the main 'popular' individuals from this section of the graph and was an amazing way to see the various network and social connections that existed between nearly 500 people. 
 ___
 ![[gephiGERMANNAMES.svg]]
 ___
 ![[close up of gephiGERMANNAMES graph.png]]
+![image](https://github.com/user-attachments/assets/ccc03a51-fe64-4846-b518-c03f715cee6f)
 ___
 ## **Gephi/Data Methodology**
 
@@ -162,28 +175,33 @@ The purpose of creating a network of the ALIU Red Flag Names report was to creat
 Ardelia Hall was an art historian and cultural affairs officer at the United States Department of State, who specialized in Nazi-looted art and assembled/reviewed many files connected with art theft and restitution claims post-war. On the reports that list the 166 works of art erroneously restituted to Mimara, Hall wrote in the margins additional information related to the pieces themselves. 
 ___
 ![[AH ATM report page 36.png]]
+![image](https://github.com/user-attachments/assets/9e8de99c-4df8-486e-a228-fb17df3338a0)
 ___
 Here, in the margins of painting no. 18, she wrote *Bruschwiller aus deutschen besitz* which means "Bruschwiller from German ownership". From this, we can gather that this painting was in the possession of Eugen Bruschwiller who obtained it from a German individual. No. 19 says *Poussin v. Theo Hermssen Paris via Dorotheum*. We know then that this painting was connected to Theo Hermssen Jr., and was possibly in Paris at one point (Hermssen was from Paris), and it was connected to Dorotheum which was an important auction house in Austria. 
 
 Hall added many notes to the margins of this particular file relating to Mimara. I took the works of art that she added additional information to and isolated just the paintings. 
 ___
 ![[AH paintings ATM from margin notes.png]]
+![image](https://github.com/user-attachments/assets/b323a37d-b731-45a0-aac1-85aa35389c7b)
 ___
 First, I graphed just this dataset to see the connections between the different paintings before comparing them to the large ALIU data corpus. 
 ___
 ![[AH ATM record graph.png]]
+![image](https://github.com/user-attachments/assets/b938a7ae-b715-4096-8db6-5595754e6c87)
 ___
 Once I was able to visualize this smaller-scale data, I inserted the written information into the ALIU nodes and edges .csv files in order to create one large graph. But I needed to find a way to visually differentiate between the two datasets in order to see the new connections better. I added a new column called 'graph source' and sorted the two data sets between 'Graph A' and 'Graph B'. 
 
 Once I had created the new graph and formatted it the way I wanted, I changed the colours of the nodes and edges according which data set they were from.
 ___
 ![[changing colours according to graph source.png]]
+![image](https://github.com/user-attachments/assets/d6e2a29d-24d2-41d6-9dcf-9fa38c48d9d3)
 ___
 I was happy with this result as it was now easy to see how the new paintings were connected to the names from the ALIU report. Beyond that, I could see other possible connections by looking at the nodes from the original graph. 
 ___
 ![[GAHGRAPH.svg]]
 ___
 ![[close up of GAHGRAPH.png]]
+![image](https://github.com/user-attachments/assets/54196b6b-0bd2-41de-b749-d46ab42f62f7)
 ___
 
 ### **CONCLUSION**
